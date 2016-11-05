@@ -48,10 +48,10 @@ def uniform_arc_interpolator(pts, method='spline', degree=3):
         return y0 + integrate.quad(arclen_piece, x0, tp)[0]
 
     def min_func(x, tp):
-        return np.abs(tp*arclen - arclen_func(x))
+        return tp*arclen - arclen_func(x)
 
     def c(tp):
-        x = np.array([optimize.fmin(min_func, p*arclen, args=(p,)) for p in tp])
+        x = np.array([optimize.fsolve(min_func, p*arclen, args=(p,)) for p in tp])
         return _interpolator(x, splines)
 
     return c
